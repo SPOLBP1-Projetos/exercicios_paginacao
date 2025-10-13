@@ -3,23 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Lista de Produtos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <ul>
-        {% for produto in produtos %}
-        <li>{{ produto.nome }}</li>
-        {% endfor %}
-    </ul>
-
-    <nav>
-        <ul class="pagination">
-            {% for page_num in range(1, total_pages + 1) %}
-            <li class="page-item {% if page == page_num %}active{% endif %}">
-                <a class="page-link" href="{{ url_for('listar_produtos_paginados', page=page_num) }}">{{ page_num }}</a>
-            </li>
+    <div class="container">
+        <h1 class="h1">Lista de Produtos</h1>
+        
+        <ul class="ul">
+            {% for produto in produtos %}
+                <li>
+                    <span class="product-name">{{ produto.nome }}</span>
+                    <div class="actions">
+                        <button>Excluir</button>
+                        <button>Consultar</button>
+                    </div>
+                </li>
             {% endfor %}
         </ul>
-    </nav>
+
+        <form class="form">
+            <input type="text" name="produto" id="produto" placeholder="Inserir Produto"> <br>
+            <button>Inserir</button>
+        </form>
+
+        <nav class="nav">
+            <ul class="ul">
+                {% for page_num in range(1, total_pages + 1) %}
+                    <li class="page-item ul_li {% if page == page_num %}active{% endif %}">
+                        <a href="{{ url_for('listar_produtos_paginados', page=page_num) }}">
+                            {{ page_num }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
 </body>
 </html>

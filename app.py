@@ -14,6 +14,11 @@ PRODUTOS = [
     {"id": 6, "nome": "Headphones RGB Led", "preco": 450},
     {"id": 7, "nome": "Teclado Mecânico sem fio", "preco": 250},
     {"id": 8, "nome": "Gabinete com led", "preco": 130},
+    {"id": 9, "nome": "Alexa oitava geração", "preco": 130},
+    {"id": 10, "nome": "Fones de Ouvido Sem Fio Gamer ", "preco": 30},
+    {"id": 11, "nome": "Carregador De Celular Turbo 50w", "preco": 50},
+    {"id": 12, "nome": "Mouse sem Fio Recarregável ", "preco": 80},
+
 ]
 
 @app.route('/api/buscar-produto', methods=['POST'])
@@ -27,7 +32,7 @@ def buscar_produto():
 
 @app.route('/produto/<int:produto_id>')
 def detalhe_produto(produto_id):
-    produto_encontrado - None
+    produto_encontrado = None
     # Busca pelo produto na lista ( performance 0(n) )
     for produto in PRODUTOS:
         if produto["id"] == produto_id:
@@ -58,7 +63,7 @@ def listar_produtos():
     return render_template('produtos.html', produtos=PRODUTOS)
 
 @app.errorhandler(404)
-def pagina_nao_encontrada():
+def pagina_nao_encontrada(error):
     return render_template('404.html'), 404
 
 if __name__ == '__main__':
