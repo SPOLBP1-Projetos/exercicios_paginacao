@@ -27,6 +27,10 @@ def listar_produtos():
 def inserir_produto():
     return ProdutoController.inserir_produto()
 
+@app.route('/excluir/<int:produto_id>')
+def excluir_produto(produto_id):
+    return ProdutoController.excluir_produto(produto_id)
+
 @app.errorhandler(404)
 def pagina_nao_encontrada(error):
     return render_template("404.html"), 404

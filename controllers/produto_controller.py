@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify, abort
+from flask import render_template, request, jsonify, abort, url_for
 from models.produto_model import ProdutoModel
 import math
 
@@ -61,4 +61,16 @@ class ProdutoController:
         return render_template(
             "sucesso.html",
             mensagem="Produto inserido com sucesso!"
+        )
+
+    @staticmethod
+    def excluir_produto(produto_id):
+        ProdutoModel.excluir(produto_id)
+
+        # ele voltará para a página atual ou página 1 se não tiver
+        page = request.args.get("page", 1)
+        return render_template(
+            "sucesso.html",
+            mensagem="Produto excluído com sucesso!",
+            voltar=url_for("produtos_paginados", page=page)
         )

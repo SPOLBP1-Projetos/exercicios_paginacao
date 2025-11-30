@@ -49,3 +49,11 @@ class ProdutoModel:
         cur.execute("INSERT INTO produtos (nome, preco) VALUES (?, ?)", (nome, preco))
         conn.commit()
         conn.close()
+
+    @staticmethod
+    def excluir(produto_id):
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM produtos WHERE id = ?", (produto_id,))
+        conn.commit()
+        conn.close()
