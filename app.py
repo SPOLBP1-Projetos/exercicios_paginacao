@@ -1,70 +1,35 @@
-from flask import Flask, render_template, request, abort, jsonify
-import math
+from flask import Flask, render_template
+from controllers.produto_controller import ProdutoController
+from models.db import init_db
 
 app = Flask(__name__)
 
-# NOSSA "BASE DE DADOS" EM MEMÓRIA
-# Uma lista de dicionários
-PRODUTOS = [
-    {"id": 1, "nome": "Notebook Gamer X", "preco": 5200},
-    {"id": 2, "nome": "Mouse sem Fio", "preco": 150},
-    {"id": 3, "nome": "Teclado Mecânico RGB", "preco": 350},
-    {"id": 4, "nome": "Monitor 27 polegadas", "preco": 150},
-    {"id": 5, "nome": "SSD 512GB", "preco": 10},
-    {"id": 6, "nome": "Headphones RGB Led", "preco": 450},
-    {"id": 7, "nome": "Teclado Mecânico sem fio", "preco": 250},
-    {"id": 8, "nome": "Gabinete com led", "preco": 130},
-    {"id": 9, "nome": "Alexa oitava geração", "preco": 130},
-    {"id": 10, "nome": "Fones de Ouvido Sem Fio Gamer ", "preco": 30},
-    {"id": 11, "nome": "Carregador De Celular Turbo 50w", "preco": 50},
-    {"id": 12, "nome": "Mouse sem Fio Recarregável ", "preco": 80},
-
-]
+# o init inicializa o banco SQLite na primeira execução
+init_db()
 
 @app.route('/api/buscar-produto', methods=['POST'])
 def buscar_produto():
-    dados = request.get_json()
-    nome_produto = dados.get('nome', '').lower()
-    
-    # Busca na nossa lista de dicionários
-    resultado = [p for p in PRODUTOS if nome_produto in p['nome'].lower()]
-    return jsonify({'produtos_encontrados':resultado})
+    return ProdutoController.buscar_produto()
 
 @app.route('/produto/<int:produto_id>')
 def detalhe_produto(produto_id):
-    produto_encontrado = None
-    # Busca pelo produto na lista ( performance 0(n) )
-    for produto in PRODUTOS:
-        if produto["id"] == produto_id:
-            produto_encontrado = produto
-            break
-    if produto_encontrado is None:
-        abort(404) # Item não encontrado
-
-    return render_template('detalhe_produto.html', produto=produto_encontrado)
+    return ProdutoController.detalhe_produto(produto_id)
 
 @app.route('/produtos-paginados')
-def listar_produtos_paginados():
-    page = request.args.get('page',1, type=int)
-    per_page = 5 # Itens por página
-
-    # Lógica da Paginação
-    start = (page - 1) * per_page
-    end = start + per_page
-    total_pages = math.ceil(len(PRODUTOS)/per_page)
-
-    # Fatiando a lista para pegar apenas os itens da página atual
-    produtos_da_pagina = PRODUTOS[start:end]
-
-    return render_template('produtos_paginados.html', produtos = produtos_da_pagina, page = page, total_pages = total_pages)
+def produtos_paginados():
+    return ProdutoController.produtos_paginados()
 
 @app.route('/produtos')
 def listar_produtos():
-    return render_template('produtos.html', produtos=PRODUTOS)
+    return ProdutoController.listar_produtos()
+
+@app.route('/inserir-produto', methods=['POST'])
+def inserir_produto():
+    return ProdutoController.inserir_produto()
 
 @app.errorhandler(404)
 def pagina_nao_encontrada(error):
-    return render_template('404.html'), 404
+    return render_template("404.html"), 404
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True, port=(5003))

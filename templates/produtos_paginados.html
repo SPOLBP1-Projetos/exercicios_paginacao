@@ -1,43 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Produtos</title>
+    <title>Produtos Paginados</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1 class="h1">Lista de Produtos</h1>
-        
-        <ul class="ul">
-            {% for produto in produtos %}
-                <li>
-                    <span class="product-name">{{ produto.nome }}</span>
-                    <div class="actions">
-                        <button>Excluir</button>
-                        <button>Consultar</button>
-                    </div>
+
+<div class="container">
+    <h1>Lista de Produtos</h1>
+
+    <ul class="product-list">
+        {% for produto in produtos %}
+        <li class="product-item">
+            <span class="product-name">{{ produto["nome"] }}</span>
+
+            <div class="actions">
+                <button class="btn btn-delete">Excluir</button>
+
+                <a href="{{ url_for('detalhe_produto', produto_id=produto['id']) }}">
+                    <button class="btn btn-view">Consultar</button>
+                </a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    
+<form class="form" action="{{ url_for('inserir_produto') }}" method="POST">
+    <input type="text" name="produto" placeholder="Nome do Produto" required><br><br>
+    <input type="number" step="0.01" name="preco" placeholder="Preço" required><br>
+    <button class="btn btn-primary" type="submit">Inserir</button>
+</form>
+
+
+    <nav class="pagination">
+        <ul>
+            {% for page_num in range(1, total_pages + 1) %}
+                <li class="page-item {% if page == page_num %}active{% endif %}">
+                    <a href="{{ url_for('produtos_paginados', page=page_num) }}">{{ page_num }}</a>
                 </li>
             {% endfor %}
         </ul>
+    </nav>
+</div>
 
-        <form class="form">
-            <input type="text" name="produto" id="produto" placeholder="Inserir Produto"> <br>
-            <button>Inserir</button>
-        </form>
-
-        <nav class="nav">
-            <ul class="ul">
-                {% for page_num in range(1, total_pages + 1) %}
-                    <li class="page-item ul_li {% if page == page_num %}active{% endif %}">
-                        <a href="{{ url_for('listar_produtos_paginados', page=page_num) }}">
-                            {{ page_num }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </nav>
-    </div>
 </body>
 </html>

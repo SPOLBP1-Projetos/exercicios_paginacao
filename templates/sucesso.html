@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erro 404</title>
+    <title>Sucesso</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-<div class="container error-page">
-    <h1>Erro 404</h1>
-    <p>A página que você está procurando não existe.</p>
+<div class="container" style="text-align:center;">
+    <h1>{{ mensagem }}</h1>
+
+    <a class="link-back" href="{{ url_for('produtos_paginados') }}">
+        Voltar à lista de produtos
+    </a>
 </div>
 
 </body>

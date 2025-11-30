@@ -1,20 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Nossos Produtos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-    <h1>Nossos produtos</h1>
-    <ul>
+<div class="container">
+    <h1>Nossos Produtos</h1>
+
+    <ul class="product-list">
         {% for produto in produtos %}
-        <li>
-            <a href="{{ url_for('detalhe_produto', produto_id=produto.id) }}"> {{ produto.nome }} </a> - R$ {{ "%.2f|format(produto.preco)" }}
+        <li class="product-item">
+            <span class="product-name">{{ produto["nome"] }}</span>
+            <a class="btn btn-view" href="{{ url_for('detalhe_produto', produto_id=produto['id']) }}">Ver detalhes</a>
         </li>
         {% endfor %}
     </ul>
-    
+</div>
+
 </body>
 </html>
